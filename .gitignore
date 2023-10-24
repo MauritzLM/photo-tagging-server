@@ -3,3 +3,9 @@
 
 ## env file
 .env
+
+## test coverage folder
+/coverage
+
+## db queries file
+dbtest.sql
