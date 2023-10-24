@@ -9,9 +9,11 @@ const leaderboardController = require('../controllers/leaderboardController');
 // image routes
 router.get('/gameimage', imageController.getImageDetails);
 
-// leaderboard routes
+// Leaderboard Routes
+// get leaderboard
 router.get('/leaderboard', leaderboardController.getLeaderboard);
 
+// update leaderboard
 router.post('/leaderboard', leaderboardController.updateLeaderboard);
 
 module.exports = router;
