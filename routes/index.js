@@ -7,7 +7,7 @@ const leaderboardController = require('../controllers/leaderboardController');
 // mount routes
 
 // image routes
-router.get('/gameimage', imageController.getImageDetails);
+router.post('/gameimage', imageController.getImageDetails);
 
 // Leaderboard Routes
 // get leaderboard
