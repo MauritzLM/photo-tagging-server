@@ -34,6 +34,8 @@ exports.getImageDetails = async function (req, res, next) {
 
     }
     catch (error) {
+
+        res.json(false);
         return next(error);
     }
 };
