@@ -1,20 +1,20 @@
 const db = require('../db');
+const { body, validationResult } = require('express-validator');
 
 // get leaderboard
 exports.getLeaderboard = async function (req, res, next) {
    try {
 
-      // clear table? (where end time = null)*
+      // clear abandoned games from table
+      await db.query('DELETE FROM game_instance WHERE end_time is NULL');
 
       const { image } = req.body;
 
-      const text = 'SELECT * FROM game_instance WHERE image = $1';
+      const text = 'SELECT player_name, end_time - start_time AS time FROM game_instance WHERE image = $1 ORDER BY DESC';
       const values = [image];
 
-      // query db to get leaderboard
+      // query db to get player_name and time -> sorted by time
       const result = await db.query(text, values);
-
-      // sort by score*
 
       // send back json  
       res.status(200).json(result);
@@ -24,22 +24,37 @@ exports.getLeaderboard = async function (req, res, next) {
    }
 }
 
-// add name to game instance*
-exports.updateLeaderboard = async function (req, res, next) {
-   try {
+// add name to game instance
+exports.updateLeaderboard = [
+   // validate and sanitize data
+   body('name', 'please enter a valid name')
+      .trim()
+      .isLength({ min: 1, max: 20 })
+      .escape(),
 
-      // validate and sanitize data*
+   async function (req, res, next) {
+      try {
 
-      const { id, name } = req.body;
+         // validation errors
+         const errors = validationResult(req);
 
-      const text = 'INSERT INTO game_instance (player_name) VALUES($1) WHERE id = $2'
-      const values = [name, id];
+         if (!errors.isEmpty()) {
+            res.json({ errors: errors.array() });
+            return;
+         }
 
-      const result = await db.query(text, values);
+         const { id, name } = req.body;
 
-      res.json(result);
+         // update player_name column with entered name
+         const text = 'UPDATE game_instance SET player_name = $1 WHERE id = $2';
+         const values = [name, id];
+
+         const result = await db.query(text, values);
+
+         res.json(result);
+      }
+      catch (error) {
+         return next(error)
+      }
    }
-   catch (error) {
-      return next(error)
-   }
-}
+];
