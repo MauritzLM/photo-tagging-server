@@ -10,7 +10,7 @@ exports.getLeaderboard = async function (req, res, next) {
 
       const { image } = req.body;
 
-      const text = 'SELECT player_name, end_time - start_time AS time FROM game_instance WHERE image = $1 ORDER BY time DESC';
+      const text = 'SELECT player_name, end_time - start_time AS time FROM game_instance WHERE image = $1 ORDER BY time ASC';
       const values = [image];
 
       // query db to get player_name and time -> sorted by time
