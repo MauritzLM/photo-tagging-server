@@ -4,18 +4,25 @@ const db = require('../db');
 exports.startGame = async function (req, res, next) {
     try {
 
+        // req data
         const { id, image } = req.body;
+
+        // start time record
         const start_time = Date.now();
 
-        // create new row in table for game, save id, image and start time
-        const text = 'INSERT INTO game_instance (id, image, start_time) VALUES($1, $2, $3)';
-        const values = [id, image, start_time];
+        // create placeholder name
+        const randomNum = Math.random() * (1000 - 1) + 1;
+        const placeholder_name = `Anonymous${Math.round(randomNum)}`;
+
+        // create new row in table for game, save id, image, start time and placeholder name
+        const text = 'INSERT INTO game_instance (id, image, start_time, player_name) VALUES($1, $2, $3, $4)';
+        const values = [id, image, start_time, placeholder_name];
 
         // query db
         const result = await db.query(text, values);
 
         // response
-        res.json(result);
+        res.json(result.rows[0]);
 
     }
     catch (error) {
