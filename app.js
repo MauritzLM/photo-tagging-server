@@ -5,7 +5,7 @@ const routes = require('./routes/index');
 const cors = require('cors');
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'https://photo-tagging-app-nine.vercel.app',
     optionsSuccessStatus: 200
 };
 

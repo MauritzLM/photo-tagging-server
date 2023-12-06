@@ -3,15 +3,21 @@ const router = express.Router();
 
 const imageController = require('../controllers/imageController');
 const leaderboardController = require('../controllers/leaderboardController');
-// import all routes
-// mount routes
+const gameTimeController = require('../controllers/gameController');
 
-// image routes
+// Game time routes
+// start game
+router.post('/gamestart', gameTimeController.startGame);
+
+// end game
+router.post('/gameend', gameTimeController.endGame);
+
+// Image details routes
 router.post('/gameimage', imageController.getImageDetails);
 
 // Leaderboard Routes
 // get leaderboard
-router.get('/leaderboard', leaderboardController.getLeaderboard);
+router.post('/getleaderboard', leaderboardController.getLeaderboard);
 
 // update leaderboard
 router.post('/leaderboard', leaderboardController.updateLeaderboard);
